@@ -1,0 +1,221 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+*/
+
+@layer base {
+  :root {
+    --background: rgb(11, 11, 11);        /* preto profundo */
+    --foreground: rgb(237, 237, 237);     /* texto claro */
+
+    --card: rgb(255, 255, 255);
+    --card-foreground: rgb(9, 9, 12);
+
+    --popover: rgb(255, 255, 255);
+    --popover-foreground: rgb(9, 9, 12);
+
+    --primary: rgb(201, 162, 77);         /* dourado premium */
+    --primary-foreground: rgb(11, 11, 11);
+
+    --secondary: rgb(245, 245, 245);
+    --secondary-foreground: rgb(23, 23, 28);
+
+    --muted: rgb(245, 245, 245);
+    --muted-foreground: rgb(115, 115, 120);
+
+    --accent: rgb(230, 195, 106);         /* dourado mais vivo */
+    --accent-foreground: rgb(11, 11, 11);
+
+    --destructive: rgb(239, 68, 68);
+    --destructive-foreground: rgb(250, 250, 250);
+
+    --border: rgb(229, 229, 234);
+    --input: rgb(229, 229, 234);
+    --ring: rgb(163, 163, 163);
+
+    --radius: 0.5rem;
+
+    --sidebar-background: rgb(250, 250, 250);
+    --sidebar-foreground: rgb(63, 63, 70);
+    --sidebar-primary: rgb(23, 23, 28);
+    --sidebar-primary-foreground: rgb(250, 250, 250);
+    --sidebar-accent: rgb(244, 244, 245);
+    --sidebar-accent-foreground: rgb(23, 23, 28);
+    --sidebar-border: rgb(229, 231, 235);
+    --sidebar-ring: rgb(59, 130, 246);
+
+    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-heading: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'SF Mono', SFMono-Regular, ui-monospace, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  }
+
+  .dark {
+    --background: rgb(9, 9, 12);
+    --foreground: rgb(250, 250, 250);
+
+    --card: rgb(20, 20, 23);
+    --card-foreground: rgb(242, 242, 242);
+
+    --popover: rgb(20, 20, 23);
+    --popover-foreground: rgb(242, 242, 242);
+
+    --primary: rgb(201, 162, 77);
+    --primary-foreground: rgb(11, 11, 11);
+
+    --secondary: rgb(38, 38, 38);
+    --secondary-foreground: rgb(250, 250, 250);
+
+    --muted: rgb(38, 38, 38);
+    --muted-foreground: rgb(178, 178, 178);
+
+    --accent: rgb(230, 195, 106);
+    --accent-foreground: rgb(11, 11, 11);
+
+    --destructive: rgb(153, 27, 27);
+    --destructive-foreground: rgb(250, 250, 250);
+
+    --border: rgb(51, 51, 51);
+    --input: rgb(51, 51, 51);
+    --ring: rgb(163, 163, 163);
+
+    --sidebar-background: rgb(23, 23, 28);
+    --sidebar-foreground: rgb(244, 244, 245);
+    --sidebar-primary: rgb(59, 130, 246);
+    --sidebar-primary-foreground: rgb(255, 255, 255);
+    --sidebar-accent: rgb(38, 38, 42);
+    --sidebar-accent-foreground: rgb(244, 244, 245);
+    --sidebar-border: rgb(38, 38, 42);
+    --sidebar-ring: rgb(59, 130, 246);
+  }
+}
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 via-yellow-500 to-amber-400;
+  }
+
+  .animate-in {
+    animation-fill-mode: both;
+  }
+
+  .fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .slide-in-from-top {
+    animation: slideInFromTop 0.7s ease-out;
+  }
+
+  .slide-in-from-left {
+    animation: slideInFromLeft 0.7s ease-out;
+  }
+
+  .slide-in-from-right {
+    animation: slideInFromRight 0.7s ease-out;
+  }
+
+  .slide-in-from-bottom {
+    animation: slideInFromBottom 0.5s ease-out;
+  }
+
+  .zoom-in {
+    animation: zoomIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideInFromTop {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInFromLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInFromRight {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInFromBottom {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes zoomIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Smooth scrolling */
+  * {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar for webkit browsers */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+  background: rgba(201, 162, 77, 0.35);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(201, 162, 77, 0.55);
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgba(201, 162, 77, 0.35);
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: rgba(201, 162, 77, 0.6);
+  }
+}
+
