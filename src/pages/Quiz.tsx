@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { Textarea } from '@/components/ui/textarea'; // Input removido daqui
 import { ArrowRight, Sparkles, AlertTriangle, ShieldCheck, Heart, Crown, Eye, Lightbulb, Lock, Star } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
@@ -97,7 +96,7 @@ const questions = [
   },
   {
     id: 10,
-    question: "Para finalizar, o que você busca no Tattoofy?",
+    question: "Para finalizar, o que você busca no Tattofy?",
     options: [
       { text: "Segurança para não me arrepender", type: "goal_security" },
       { text: "Criatividade para criar algo único", type: "goal_creativity" },
@@ -109,7 +108,7 @@ const questions = [
 
 // Depoimentos rápidos para a tela final
 const quizTestimonials = [
-    { name: "Mariana Costa", content: "Eu tava quase desistindo de tatuar porque não achava o desenho certo. O Tattoofy leu minha mente!", stars: 5 },
+    { name: "Mariana Costa", content: "Eu tava quase desistindo de tatuar porque não achava o desenho certo. O Tattofy leu minha mente!", stars: 5 },
     { name: "Pedro H.", content: "O resultado do meu perfil foi assustadoramente preciso. E a imagem gerada... sem palavras.", stars: 5 },
     { name: "Carla Dias", content: "Ver a prévia da minha ideia tirou todo o meu medo. Já marquei a sessão!", stars: 5 },
     { name: "André L.", content: "Achei que era só mais um quiz bobo, mas a análise final me surpreendeu muito. Vale a pena.", stars: 5 },
@@ -122,15 +121,17 @@ export default function Quiz() {
   
   // --- STATES ---
   const [currentView, setCurrentView] = useState<Step>('gender');
-  const [gender, setGender] = useState<'man' | 'woman' | null>(null);
-  const [age, setAge] = useState('');
+  
+  // CORREÇÃO: Usamos a vírgula para ignorar a variável de leitura, mantendo apenas a função 'set'
+  const [, setGender] = useState<'man' | 'woman' | null>(null);
+  const [, setAge] = useState('');
   
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   
   const [customIdea, setCustomIdea] = useState('');
   const [generatedPreview, setGeneratedPreview] = useState<string | null>(null);
-  const [generationError, setGenerationError] = useState(false);
+  // CORREÇÃO: Removemos generationError pois não estava sendo usado na tela
 
   // --- ACTIONS ---
 
@@ -173,7 +174,7 @@ export default function Quiz() {
         setGeneratedPreview(imageUrl);
     } catch (err) {
         console.log("Geração anônima não permitida, mostrando teaser.");
-        setGenerationError(true);
+        // Ignoramos erro visualmente para não quebrar fluxo, apenas mostramos o teaser borrado
     }
 
     setTimeout(() => {
@@ -260,7 +261,7 @@ export default function Quiz() {
                         className="group relative aspect-[3/4] rounded-2xl overflow-hidden border-2 border-neutral-800 hover:border-amber-500 transition-all duration-300 hover:scale-105"
                     >
                         <img 
-                            src="https://tnhpmtiaouiumxmbauek.supabase.co/storage/v1/object/sign/tatuagens/homem-tatuado-com-fones-de-ouvido-contra-o-ceu-azul-no-oceano.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wYzk2YWQzZS0xNGY4LTQ2NjktOWRhMS1mOGZjYTQzZjQwZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ0YXR1YWdlbnMvaG9tZW0tdGF0dWFkby1jb20tZm9uZXMtZGUtb3V2aWRvLWNvbnRyYS1vLWNldS1henVsLW5vLW9jZWFuby5qcGciLCJpYXQiOjE3NjgxNjMyNjgsImV4cCI6MTc5OTY5OTI2OH0.LxofVeZSP5ieZ71_RLzqLjsdQ9BL6vvLa4oAFuAp6NI" 
+                            src="https://images.unsplash.com/photo-1590246237699-22a30df30b4d?q=80&w=600&auto=format&fit=crop" 
                             alt="Homem Tatuado" 
                             className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
                         />
@@ -273,7 +274,7 @@ export default function Quiz() {
                         className="group relative aspect-[3/4] rounded-2xl overflow-hidden border-2 border-neutral-800 hover:border-amber-500 transition-all duration-300 hover:scale-105"
                     >
                         <img 
-                            src="https://tnhpmtiaouiumxmbauek.supabase.co/storage/v1/object/sign/tatuagens/retrato-de-mulher-com-tatuagens-no-corpo.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtlZXl8MGM5NmFkM2UtMTRmOC00NjY5LTlkYTEtZjhmY2E0M2Y0MGQwIiwiYWxnIjoiSFMyNTYifQ.eyJ1cmwiOiJ0YXR1YWdlbnMvcmV0cmF0by1kZS1tdWxoZXItY29tLXRhdHVhZ2Vucy1uby1jb3Jwby5qcGciLCJpYXQiOjE3NjgxNjMzODYsImV4cCI6MTc5OTY5OTM4Nn0.gNYNcoh4D2m9WXPp0_tNvAUzSzKA0XR_ZbpYc4_asCg" 
+                            src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=600&auto=format&fit=crop" 
                             alt="Mulher Tatuada" 
                             className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
                         />
@@ -433,14 +434,14 @@ export default function Quiz() {
                             <div className="bg-green-500/10 border border-green-500/20 p-4 rounded-xl flex gap-3">
                                 <ShieldCheck className="w-5 h-5 text-green-400 flex-shrink-0 mt-1" />
                                 <div>
-                                    <span className="font-bold text-green-400 block text-sm mb-1">A Solução Tattoofy</span>
+                                    <span className="font-bold text-green-400 block text-sm mb-1">A Solução Tattofy</span>
                                     <p className="text-neutral-400 text-sm">{result.solution}</p>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
 
-                    {/* LADO DIREITO: A SURPRESA (SEM BADGE VERDE) */}
+                    {/* LADO DIREITO: A SURPRESA */}
                     <Card className="border-2 border-amber-500/50 bg-neutral-950 overflow-hidden relative group min-h-[500px]">
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/90 z-10 pointer-events-none"></div>
                         
@@ -507,7 +508,7 @@ export default function Quiz() {
                             onClick={handleUnlock}
                             className="w-full h-16 text-xl md:text-2xl font-bold bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:scale-105 transition-transform shadow-[0_0_40px_rgba(245,158,11,0.3)] rounded-full animate-pulse"
                         >
-                            Crie sua conta e liberte o poder do Tattoofy.IA
+                            Crie sua conta e liberte o poder do Tattofy.IA
                         </Button>
                         <p className="text-neutral-500 mt-4 text-sm">
                             Comece gratuitamente com créditos de bônus. Cancele quando quiser.
