@@ -5,11 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Pen, Loader2, ArrowLeft, Mail, Lock, User, CheckCircle2 } from 'lucide-react';
+import { Pen, Loader2, ArrowLeft, Mail, Lock, User, CheckCircle2, KeyRound } from 'lucide-react';
 
 export default function AuthPage() {
   const [loading, setLoading] = useState(false);
-  const [isLogin, setIsLogin] = useState(true); // Alternar entre Login e Cadastro
+  const [isLogin, setIsLogin] = useState(true); // Login vs Cadastro
+  const [isReset, setIsReset] = useState(false); // Novo estado: Recuperação de Senha
   
   // Estados do formulário
   const [name, setName] = useState('');
@@ -25,14 +26,38 @@ export default function AuthPage() {
     setLoading(true);
 
     try {
+      // --- CENÁRIO 1: RECUPERAÇÃO DE SENHA ---
+      if (isReset) {
+        if (!email.trim()) {
+            throw new Error('Digite seu e-mail para recuperar a senha.');
+        }
+
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + '/update-password', // Onde o usuário cai após clicar no email
+        });
+
+        if (error) throw error;
+
+        toast({
+            title: 'Email enviado!',
+            description: 'Verifique sua caixa de entrada para redefinir a senha.',
+            className: "bg-neutral-900 border-green-500/50 text-green-500",
+            action: <CheckCircle2 className="w-8 h-8 text-green-500" />,
+        });
+
+        setIsReset(false); // Volta para o login
+        setLoading(false);
+        return;
+      }
+
+      // --- CENÁRIO 2: LOGIN ---
       if (isLogin) {
-        // --- LOGIN ---
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         navigate('/');
-      } else {
-        // --- CADASTRO ---
-        
+      } 
+      // --- CENÁRIO 3: CADASTRO ---
+      else {
         // 1. Validar se as senhas batem
         if (password !== confirmPassword) {
           toast({
@@ -57,29 +82,28 @@ export default function AuthPage() {
           return;
         }
 
-        // 3. Criar conta no Supabase (salvando o nome nos metadados)
+        // 3. Criar conta no Supabase
         const { error } = await supabase.auth.signUp({ 
           email, 
           password,
           options: {
             data: {
-              full_name: name, // Salva o nome do usuário no banco
+              full_name: name,
             }
           }
         });
 
         if (error) throw error;
 
-        // 4. Mensagem de Sucesso (Popup)
+        // 4. Mensagem de Sucesso
         toast({
           title: 'Conta criada com sucesso!',
-          description: 'Enviamos um link de confirmação para o seu e-mail. Confirme para entrar.',
+          description: 'Enviamos um link de confirmação para o seu e-mail.',
           className: "bg-neutral-900 border-green-500/50 text-green-500",
           action: <CheckCircle2 className="w-8 h-8 text-green-500" />,
-          duration: 6000, // Fica na tela por 6 segundos
+          duration: 6000,
         });
         
-        // Opcional: Mudar para a tela de login automaticamente
         setIsLogin(true);
       }
     } catch (error: any) {
@@ -92,6 +116,22 @@ export default function AuthPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Função auxiliar para resetar estados ao trocar de aba
+  const toggleMode = (mode: 'login' | 'signup' | 'reset') => {
+      setPassword('');
+      setConfirmPassword('');
+      if (mode === 'reset') {
+          setIsReset(true);
+          setIsLogin(true); // Reset é uma variação do login visualmente
+      } else if (mode === 'login') {
+          setIsReset(false);
+          setIsLogin(true);
+      } else {
+          setIsReset(false);
+          setIsLogin(false);
+      }
   };
 
   return (
@@ -110,23 +150,31 @@ export default function AuthPage() {
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
         
         <CardContent className="p-8 space-y-6">
-          {/* Cabeçalho do Card */}
+          {/* Cabeçalho do Card Dinâmico */}
           <div className="text-center space-y-2">
             <div className="inline-flex p-3 rounded-full bg-amber-500/10 border border-amber-500/20 mb-2 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-              <Pen className="w-6 h-6 text-amber-400" />
+              {isReset ? (
+                  <KeyRound className="w-6 h-6 text-amber-400" />
+              ) : (
+                  <Pen className="w-6 h-6 text-amber-400" />
+              )}
             </div>
+            
             <h1 className="text-2xl font-bold text-neutral-100 animate-in fade-in slide-in-from-bottom duration-500">
-              {isLogin ? 'Acesse sua conta' : 'Junte-se ao Tattofy.IA'}
+              {isReset ? 'Recuperar Senha' : (isLogin ? 'Acesse sua conta' : 'Junte-se ao Tattofy.IA')}
             </h1>
+            
             <p className="text-neutral-400 text-sm">
-              {isLogin ? 'Bem-vindo de volta à sua galeria criativa' : 'Crie, salve e experimente tatuagens com IA'}
+              {isReset 
+                ? 'Digite seu e-mail e enviaremos um link para você.' 
+                : (isLogin ? 'Bem-vindo de volta à sua galeria criativa' : 'Crie, salve e experimente tatuagens com IA')}
             </p>
           </div>
 
           <form onSubmit={handleAuth} className="space-y-4 animate-in fade-in slide-in-from-bottom duration-700 delay-100">
             
-            {/* Campo NOME (Só aparece no Cadastro) */}
-            {!isLogin && (
+            {/* Campo NOME (Só aparece no Cadastro e se não for Reset) */}
+            {!isLogin && !isReset && (
               <div className="space-y-2 animate-in zoom-in-95 duration-300">
                 <div className="relative group">
                   <User className="absolute left-3 top-3 w-5 h-5 text-neutral-500 group-focus-within:text-amber-500 transition-colors" />
@@ -142,7 +190,7 @@ export default function AuthPage() {
               </div>
             )}
 
-            {/* Campo E-MAIL */}
+            {/* Campo E-MAIL (Sempre aparece) */}
             <div className="space-y-2">
               <div className="relative group">
                 <Mail className="absolute left-3 top-3 w-5 h-5 text-neutral-500 group-focus-within:text-amber-500 transition-colors" />
@@ -157,24 +205,39 @@ export default function AuthPage() {
               </div>
             </div>
 
-            {/* Campo SENHA */}
-            <div className="space-y-2">
-              <div className="relative group">
-                <Lock className="absolute left-3 top-3 w-5 h-5 text-neutral-500 group-focus-within:text-amber-500 transition-colors" />
-                <Input
-                  type="password"
-                  placeholder="Sua senha secreta"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 h-12 bg-neutral-950/50 border-neutral-800 text-neutral-200 focus:border-amber-500/50 focus:ring-amber-500/20 rounded-xl placeholder:text-neutral-600"
-                  required
-                  minLength={6}
-                />
-              </div>
-            </div>
+            {/* Campo SENHA (Esconde no Reset) */}
+            {!isReset && (
+                <div className="space-y-2 animate-in fade-in">
+                <div className="relative group">
+                    <Lock className="absolute left-3 top-3 w-5 h-5 text-neutral-500 group-focus-within:text-amber-500 transition-colors" />
+                    <Input
+                    type="password"
+                    placeholder="Sua senha secreta"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pl-10 h-12 bg-neutral-950/50 border-neutral-800 text-neutral-200 focus:border-amber-500/50 focus:ring-amber-500/20 rounded-xl placeholder:text-neutral-600"
+                    required={!isReset}
+                    minLength={6}
+                    />
+                </div>
+                </div>
+            )}
+
+            {/* Link ESQUECI MINHA SENHA (Aparece só no Login) */}
+            {isLogin && !isReset && (
+                <div className="flex justify-end">
+                    <button 
+                        type="button"
+                        onClick={() => toggleMode('reset')}
+                        className="text-xs text-neutral-500 hover:text-amber-500 transition-colors"
+                    >
+                        Esqueci minha senha
+                    </button>
+                </div>
+            )}
 
             {/* Campo CONFIRMAR SENHA (Só aparece no Cadastro) */}
-            {!isLogin && (
+            {!isLogin && !isReset && (
               <div className="space-y-2 animate-in zoom-in-95 duration-300">
                 <div className="relative group">
                   <Lock className={`absolute left-3 top-3 w-5 h-5 transition-colors ${confirmPassword && password !== confirmPassword ? 'text-red-500' : 'text-neutral-500 group-focus-within:text-amber-500'}`} />
@@ -187,7 +250,6 @@ export default function AuthPage() {
                     required={!isLogin}
                   />
                 </div>
-                {/* Feedback visual se senhas não batem */}
                 {confirmPassword && password !== confirmPassword && (
                     <p className="text-xs text-red-500 ml-1">As senhas não coincidem</p>
                 )}
@@ -205,26 +267,25 @@ export default function AuthPage() {
                     Processando...
                 </>
               ) : (
-                isLogin ? 'Entrar na Plataforma' : 'Criar Conta Grátis'
+                isReset ? 'Enviar Link de Recuperação' : (isLogin ? 'Entrar na Plataforma' : 'Criar Conta Grátis')
               )}
             </Button>
           </form>
 
-          {/* Toggle Login/Cadastro */}
+          {/* Toggle Login/Cadastro/Voltar */}
           <div className="text-center pt-2">
             <p className="text-neutral-500 text-sm mb-2">
-                {isLogin ? 'Novo por aqui?' : 'Já possui cadastro?'}
+                {isReset 
+                    ? 'Lembrou sua senha?' 
+                    : (isLogin ? 'Novo por aqui?' : 'Já possui cadastro?')}
             </p>
             <button
-              onClick={() => {
-                setIsLogin(!isLogin);
-                // Limpar campos sensíveis ao trocar de aba
-                setPassword('');
-                setConfirmPassword('');
-              }}
+              onClick={() => toggleMode(isLogin && !isReset ? 'signup' : 'login')}
               className="text-sm font-medium text-amber-500 hover:text-amber-400 transition-colors uppercase tracking-wide border-b border-transparent hover:border-amber-500 pb-0.5"
             >
-              {isLogin ? 'Criar uma conta agora' : 'Fazer login'}
+              {isReset 
+                ? 'Voltar para Login' 
+                : (isLogin ? 'Criar uma conta agora' : 'Fazer login')}
             </button>
           </div>
         </CardContent>

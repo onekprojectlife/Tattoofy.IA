@@ -329,7 +329,7 @@ export default function Landing() {
                   </div>
                   <h2 className="text-4xl font-bold mb-6">Seu Mentor de Tatuagem 24/7</h2>
                   <p className="text-xl text-neutral-400 mb-8">
-                      Não sabe se vai doer? Quer dicas de cuidados pós-tattoo? O <strong>InkMaster AI</strong> tira todas as suas dúvidas instantaneamente.
+                      Não sabe se vai doer? Quer dicas de cuidados pós-tattoo? O <strong>Mestre Tattoofy</strong> tira todas as suas dúvidas instantaneamente.
                   </p>
                   <ul className="space-y-4">
                       <li className="flex items-center gap-3 text-neutral-300"><Check className="w-5 h-5 text-blue-500" /> Dicas de cicatrização</li>
@@ -338,19 +338,47 @@ export default function Landing() {
                   </ul>
               </div>
               <div className="relative">
-                  <div className="absolute inset-0 bg-blue-500/10 blur-[80px] rounded-full"></div>
-                  <div className="relative bg-neutral-950 border border-neutral-800 rounded-2xl p-6 shadow-2xl max-w-md mx-auto">
-                      <div className="flex items-center gap-3 border-b border-white/5 pb-4 mb-4">
-                          <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center"><Bot className="w-6 h-6 text-amber-500" /></div>
-                          <div><p className="font-bold text-white">InkMaster AI</p><p className="text-xs text-green-500 flex items-center gap-1"><span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Online</p></div>
-                      </div>
-                      <div className="space-y-4 text-sm">
-                          <div className="bg-neutral-800 p-3 rounded-lg rounded-tl-none text-neutral-300 w-[80%]">Olá! Sou seu especialista. Onde você pensa em fazer a próxima tattoo?</div>
-                          <div className="bg-blue-600 p-3 rounded-lg rounded-tr-none text-white w-[80%] ml-auto">Estou pensando na costela, mas tenho medo da dor.</div>
-                          <div className="bg-neutral-800 p-3 rounded-lg rounded-tl-none text-neutral-300 w-[90%]">A costela é uma área sensível, nota 8/10 na escala de dor. Mas o resultado é incrível! Recomendo descansar bem antes e hidratar a pele.</div>
-                      </div>
-                  </div>
-              </div>
+    {/* Fundo com brilho */}
+    <div className="absolute inset-0 bg-blue-500/10 blur-[80px] rounded-full"></div>
+    
+    {/* Card do Chat */}
+    <div className="relative bg-neutral-950 border border-neutral-800 rounded-2xl p-6 shadow-2xl max-w-md mx-auto">
+        
+        {/* CABEÇALHO DO CHAT */}
+        <div className="flex items-center gap-3 border-b border-white/5 pb-4 mb-4">
+            {/* Foto do Mestre (Nova) */}
+            <div className="w-12 h-12">
+                <img 
+                    src="/assets/mestre-tattofy.png" 
+                    alt="Mestre Tattoofy" 
+                    className="w-full h-full object-cover"
+                />
+            </div>
+            
+            {/* Nome e Status (Novo) */}
+            <div>
+                <p className="font-bold text-white text-base">Mestre Tattoofy</p>
+                <p className="text-xs text-green-500 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> 
+                    Online agora
+                </p>
+            </div>
+        </div>
+        
+        {/* CORPO DO CHAT (Mantive o diálogo igual) */}
+        <div className="space-y-4 text-sm">
+            <div className="bg-neutral-800 p-3 rounded-lg rounded-tl-none text-neutral-300 w-[80%]">
+                Olá! Sou seu especialista. Onde você pensa em fazer a próxima tattoo?
+            </div>
+            <div className="bg-blue-600 p-3 rounded-lg rounded-tr-none text-white w-[80%] ml-auto">
+                Estou pensando na costela, mas tenho medo da dor.
+            </div>
+            <div className="bg-neutral-800 p-3 rounded-lg rounded-tl-none text-neutral-300 w-[90%]">
+                A costela é uma área sensível, nota 8/10 na escala de dor. Mas o resultado é incrível! Recomendo descansar bem antes e hidratar a pele.
+            </div>
+        </div>
+    </div>
+</div>
           </div>
       </section>
 
