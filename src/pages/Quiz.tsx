@@ -261,7 +261,7 @@ export default function Quiz() {
                         className="group relative aspect-[3/4] rounded-2xl overflow-hidden border-2 border-neutral-800 hover:border-amber-500 transition-all duration-300 hover:scale-105"
                     >
                         <img 
-                            src="https://images.unsplash.com/photo-1590246237699-22a30df30b4d?q=80&w=600&auto=format&fit=crop" 
+                            src="https://tnhpmtiaouiumxmbauek.supabase.co/storage/v1/object/sign/tatuagens/homem-tatuado-com-fones-de-ouvido-contra-o-ceu-azul-no-oceano.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wYzk2YWQzZS0xNGY4LTQ2NjktOWRhMS1mOGZjYTQzZjQwZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ0YXR1YWdlbnMvaG9tZW0tdGF0dWFkby1jb20tZm9uZXMtZGUtb3V2aWRvLWNvbnRyYS1vLWNldS1henVsLW5vLW9jZWFuby5qcGciLCJpYXQiOjE3NjgxNjMyNjgsImV4cCI6MTc5OTY5OTI2OH0.LxofVeZSP5ieZ71_RLzqLjsdQ9BL6vvLa4oAFuAp6NI" 
                             alt="Homem Tatuado" 
                             className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
                         />
@@ -274,7 +274,7 @@ export default function Quiz() {
                         className="group relative aspect-[3/4] rounded-2xl overflow-hidden border-2 border-neutral-800 hover:border-amber-500 transition-all duration-300 hover:scale-105"
                     >
                         <img 
-                            src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=600&auto=format&fit=crop" 
+                            src="https://tnhpmtiaouiumxmbauek.supabase.co/storage/v1/object/sign/tatuagens/retrato-de-mulher-com-tatuagens-no-corpo.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wYzk2YWQzZS0xNGY4LTQ2NjktOWRhMS1mOGZjYTQzZjQwZDAiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ0YXR1YWdlbnMvcmV0cmF0by1kZS1tdWxoZXItY29tLXRhdHVhZ2Vucy1uby1jb3Jwby5qcGciLCJpYXQiOjE3NjgxNjMzODYsImV4cCI6MTc5OTY5OTM4Nn0.gNYNcoh4D2m9WXPp0_tNvAUzSzKA0XR_ZbpYc4_asCg" 
                             alt="Mulher Tatuada" 
                             className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
                         />

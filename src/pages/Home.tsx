@@ -11,6 +11,20 @@ import { supabase } from '@/lib/supabase';
 import { getProfile } from '@/lib/profile';
 import { TattooChat } from '@/components/TattooChat';
 
+// --- COLE SEUS IDs DO STRIPE AQUI ---
+const STRIPE_PRICES = {
+    // PLANOS (Assinaturas - Modo 'subscription')
+    starter: 'price_1Spg7kRYVjOi52egPPRYoKbG', // Plano Iniciante
+    basic: 'price_1Spg8sRYVjOi52eg9VrBTfEn',   // Plano Básico
+    premium: 'price_1SpgALRYVjOi52egvzCeHE8Y', // Plano Premium
+
+    // CRÉDITOS (Avulso - Modo 'payment')
+    pack_s: 'price_1SpgC4RYVjOi52egyVVpZ5Ia',  // Pack Curioso (15)
+    pack_m: 'price_1SpgCeRYVjOi52egg75IkKGS',  // Pack Criativo (50)
+    pack_l: 'price_1SpgDBRYVjOi52egGnLJDwBi',  // Pack Estúdio (120)
+    pack_xl: 'price_1SpgDkRYVjOi52egoXcZZhcq'  // Pack Visionário (300)
+};
+
 type GenerationMode = 'flash' | 'realistic';
 
 // Dados dos Pacotes de Créditos
@@ -216,27 +230,55 @@ export default function Home() {
     if (currentTattoo) navigate('/try-on', { state: { tattoo: currentTattoo } });
   };
 
-  const handleBuyPlan = (planName: string) => {
-    if (!user) {
-        toast({ title: 'Crie uma conta', description: 'Cadastre-se para assinar.' });
-        navigate('/auth');
-        return;
-    }
-    toast({ title: 'Plano selecionado', description: `Plano ${planName}. Redirecionando...`, className: "bg-neutral-900 border-amber-500/50 text-amber-500" });
-  };
-
-  // --- NOVA FUNÇÃO DE COMPRA DE CRÉDITOS ---
-  const handleBuyCredits = (amount: number, price: string) => {
+  const handleCheckout = async (priceId: string, mode: 'subscription' | 'payment', creditsAmount: number = 0) => {
       if (!user) {
+          toast({ title: 'Crie uma conta', description: 'Você precisa estar logado para comprar.' });
           navigate('/auth');
           return;
       }
-      // Aqui você integraria o Stripe/Mercado Pago
-      toast({
-          title: "Pedido Iniciado",
-          description: `Comprando ${amount} créditos por R$ ${price}. Redirecionando para pagamento...`,
-          className: "bg-neutral-900 border-amber-500/50 text-amber-500"
-      });
+
+      toast({ title: 'Iniciando Checkout', description: 'Redirecionando para pagamento seguro...' });
+
+      try {
+          const { data, error } = await supabase.functions.invoke('create-checkout', {
+              body: { 
+                  priceId, 
+                  mode, 
+                  userId: user.id, 
+                  userEmail: user.email,
+                  creditsAmount 
+              }
+          });
+
+          if (error) throw error;
+          if (data?.url) {
+              window.location.href = data.url; // Redireciona para o Stripe
+          }
+      } catch (error) {
+          console.error(error);
+          toast({ title: 'Erro', description: 'Não foi possível iniciar o pagamento.', variant: 'destructive' });
+      }
+  };
+
+  const handleBuyPlan = (planName: string) => {
+      // Mapeia o nome do botão para o ID
+      let priceId = '';
+      if (planName === 'Iniciante') priceId = STRIPE_PRICES.starter;
+      if (planName === 'Básico') priceId = STRIPE_PRICES.basic;
+      if (planName === 'Premium') priceId = STRIPE_PRICES.premium;
+
+      if (priceId) handleCheckout(priceId, 'subscription');
+  };
+
+  const handleBuyCredits = (amount: number, priceDisplay: string) => {
+      // Mapeia a quantidade para o ID correto
+      let priceId = '';
+      if (amount === 15) priceId = STRIPE_PRICES.pack_s;
+      if (amount === 50) priceId = STRIPE_PRICES.pack_m;
+      if (amount === 120) priceId = STRIPE_PRICES.pack_l;
+      if (amount === 300) priceId = STRIPE_PRICES.pack_xl;
+
+      if (priceId) handleCheckout(priceId, 'payment', amount);
   };
 
   const scrollToPlans = (e: React.MouseEvent | null) => {
