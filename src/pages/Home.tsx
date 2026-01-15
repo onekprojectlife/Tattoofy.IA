@@ -270,14 +270,17 @@ export default function Home() {
       if (priceId) handleCheckout(priceId, 'subscription');
   };
 
-  const handleBuyCredits = (amount: number, priceDisplay: string) => {
-      // Mapeia a quantidade para o ID correto
+  const handleBuyCredits = (amount: number) => { 
+      // Removido 'priceDisplay' dos argumentos pois não era usado
+      
       let priceId = '';
+      // Mapeia a quantidade para o ID correto do Stripe
       if (amount === 15) priceId = STRIPE_PRICES.pack_s;
       if (amount === 50) priceId = STRIPE_PRICES.pack_m;
       if (amount === 120) priceId = STRIPE_PRICES.pack_l;
       if (amount === 300) priceId = STRIPE_PRICES.pack_xl;
 
+      // Só inicia o checkout se achou um ID válido
       if (priceId) handleCheckout(priceId, 'payment', amount);
   };
 
@@ -559,7 +562,7 @@ export default function Home() {
                               
                               <div className="mt-auto w-full">
                                   <Button 
-                                      onClick={() => handleBuyCredits(pack.credits, pack.price)}
+                                      onClick={() => handleBuyCredits(pack.credits)}
                                       variant="outline" 
                                       className="w-full border-neutral-700 hover:bg-white hover:text-black transition-colors"
                                   >
